@@ -27,10 +27,10 @@ def main():
 def searchwordfromfile(content, contentarray):
     for word in content:
         if word != '':
-            if word.lower() in contentarray:
-                contentarray[word.lower()] += 1
+            if word in contentarray:
+                contentarray[word] += 1
             else:
-                contentarray[word.lower()] = 1
+                contentarray[word] = 1
 
 
 if __name__ == '__main__':
