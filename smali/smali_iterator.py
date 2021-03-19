@@ -1,0 +1,36 @@
+import sys
+import os
+import re
+
+def main():
+    filepath = sys.argv[1]
+    # searchparam = sys.argv[2]
+
+    strippedparam = "v0"
+
+    if not os.path.isfile(filepath):
+        print("File path {} does not exist.".format(filepath))
+        sys.exit()
+
+    contentarray = {}
+    with open(filepath) as fp:
+        count = 0
+        for line in fp:
+            line = line.rstrip()
+            count += 1
+            if re.search(r"{}".format(strippedparam), line):
+                print("line {} : contents {}".format(count, line))
+                searchwordfromfile(line.strip().split(' '), contentarray)
+
+def searchwordfromfile(content, contentarray):
+    for word in content:
+        if word != '':
+            if word.lower() in contentarray:
+                contentarray[word.lower()] += 1
+            else:
+                contentarray[word.lower()] = 1
+
+
+if __name__ == '__main__':
+    main()
+
