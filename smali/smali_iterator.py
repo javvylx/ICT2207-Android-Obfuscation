@@ -2,11 +2,13 @@ import sys
 import os
 import re
 
+# Run using: python smali/smali_iterator.py smali/samples/<<filename>> "<<search parameter>>"
+
 def main():
     filepath = sys.argv[1]
-    # searchparam = sys.argv[2]
+    searchparam = sys.argv[2]
 
-    strippedparam = "v0"
+    strippedparam = searchparam.strip('"')
 
     if not os.path.isfile(filepath):
         print("File path {} does not exist.".format(filepath))
