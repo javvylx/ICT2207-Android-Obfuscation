@@ -22,10 +22,12 @@ def uploadFile():
             Screen().printf("Only .apk and .java files are supported.")
 
 def decompile():
-    CommandItem("Decompile", "java -jar apktool.jar").action()
+    CommandItem("Decompile", "java -jar apktool.jar d -f \"" + filename + "\"").action()
     PromptUtils(Screen()).enter_to_continue() 
 def recompile():
-    Screen().printf("recompile function")
+    appName = filename.split(".")[0]
+    CommandItem("Decompile", "java -jar apktool.jar b -f -d \"" + appName + "\"").action()
+    PromptUtils(Screen()).enter_to_continue() 
 def obfuscate():
     Screen().printf("obfuscate function: " + filename)
 def main():
