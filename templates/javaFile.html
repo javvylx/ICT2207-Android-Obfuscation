@@ -7,15 +7,24 @@
     <div class="Content">
         <div id="login-page" class="row">
             <div class="login-card col s12 m8 push-m2 z-depth-2 grey lighten-5">
-                <h4 class="center">Code Obfuscator App</h4>
-                <div class="center">
-                    <button type="submit" name="Upload" value="submit"
-                    class="btn center waves-effect waves-light black login-button">Upload File</button>
+                <h4 class="center">Code Obfuscator App - Java File</h4>
+                <div class="input-field col s12">
+                    <input id="filename" name="filename" type="text" class="validate">
+                    <label for="filename1" class="center">Selected File</label>
+                </div>
+                <div class="center col s12">
+                    <button type="decompile" name="decompile" value="submit"
+                    class="btn center waves-effect waves-light black login-button s12">Obfuscate</button>
                 </div>
 
                 <div class="input-field col s12">
-                    <input id="filename" name="filename" type="text" class="validate">
-                    <label for="filename1">File Name</label>
+                    <input id="original" name="original" type="text" class="input-lg" disabled/>
+                    <label for="original">File Contents</label>
+                </div>
+
+                <div class="input-field col s12">
+                    <input id="obfuscated" name="obfuscated" type="text" class="input-lg" disabled/>
+                    <label for="obfuscated">Obfuscated File Contents</label>
                 </div>
             </div>
         </div>
