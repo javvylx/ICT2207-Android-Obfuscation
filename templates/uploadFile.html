@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Obfuscator App</title>
+
+<div class="container login-cont">
+    <div class="Content">
+        <div id="login-page" class="row">
+            <div class="login-card col s12 m8 push-m2 z-depth-2 grey lighten-5">
+                <h4 class="center">Code Obfuscator App</h4>
+                <div class="file-field input-field">
+                    <div class="btn center waves-effect waves-light black">
+                      <span>File Upload</span>
+                      <input type="file">
+                    </div>
+                    <div class="file-path-wrapper">
+                      <input id="readText" class="file-path validate" type="text">
+                    </div>
+                  </div>
+
+                <div class="input-field col s12">
+                    <input id="filename" name="filename" type="text" class="input-lg" disabled/>
+                    <label for="username">File Name</label>
+                </div>
+                <div class="center">
+                    <button name="continue" value="Continue"
+                    class="btn center waves-effect waves-light black login-button">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
