@@ -33,14 +33,14 @@
     .local v2, "tmp":I
     const/4 v0, 0x0
 
-#    :goto_0
-#    if-ge v0, p1, :cond_1
+    :goto_0
+    if-ge v0, p1, :cond_1
 
     .line 21
     const/4 v1, 0x0
 
-#    :goto_1
-#    if-ge v1, p1, :cond_0
+    :goto_1
+    if-ge v1, p1, :cond_0
 
     .line 22
     add-int/2addr v2, v1
@@ -53,13 +53,13 @@
     .line 21
     add-int/lit8 v1, v1, 0x1
 
-#    goto :goto_1
+    goto :goto_1
 
     .line 20
     :cond_0
     add-int/lit8 v0, v0, 0x1
 
-#    goto :goto_0
+    goto :goto_0
 
     .line 26
     :cond_1
