@@ -6,6 +6,7 @@ import sys
 
 smaliList = []  # define an empty list
 
+
 def main():
     filepath = sys.argv[1]
     searchparam = sys.argv[2]
@@ -24,17 +25,24 @@ def main():
 
 
 def searchWord(count, strippedparam):
+    searchList = []
     for element in smaliList:
         count += 1
-        if re.search(r"{}".format(strippedparam), element):  # Regex handle search
-            print("line {} : contents {}".format(count, element))  # Format in Line and Contents
+        if re.search(r"{}".format(strippedparam),
+                     element):  # Regex handle search
+            # print("line {} : contents {}".format(
+            #    count, element))  # Format in Line and Contents
+            searchList.append(element)
+    return searchList
 
 
 def populateList(fp):
     for line in fp:
-        currentNode = line[:-1]  # remove linebreak which is the last character of the string
+        currentNode = line[:
+                           -1]  # remove linebreak which is the last character of the string
         # add item to the list
         smaliList.append(currentNode)  # Add items to the list
+    return smaliList
 
 
 if __name__ == '__main__':
