@@ -5,24 +5,36 @@ import secrets
 import re
 import os
 
+# edit here for filename variable
+inputfile = "smali/samples/test.smali"
+outputfile = "./smali/samples/test_try_except.smali"
 
-def main():
-    filepath = sys.argv[1]
+# main function
+def main(inputfile, outputfile):
 
+    # get file path
+    filepath = inputfile
+
+    # get smali file content in list and first variable number
     fileList, startV = getFileList(filepath)
 
+    # get all private and public methods and their count
     methodDict, methodNo = getTryContent(fileList)
 
+    # get all protected methods and their count
     protectedDict, protectedNo = getProtectedMethod(fileList)
 
+    # get the randomised junk Try Code and number of registers required
     tryContent, register = randomTry(startV)
 
+    # get everything before virtual methods
     beforeTry = []
     for lineTry in fileList:
         beforeTry.append(lineTry)
         if lineTry == "# virtual methods" or lineTry == "# virtual method":
             break
 
+    # manipulate the private and public methods to include junk Try code and push original code into Except
     tryBool = False
     if methodNo > 0:
         for eachMethod in methodDict:
@@ -38,7 +50,8 @@ def main():
                         )
                     tryBool = False
 
-    with open("./smali/samples/test_try_except.smali", "w+") as filehandle:
+    # Write all Lists into the final file
+    with open(outputfile, "w+") as filehandle:
         for beforeTryLine in beforeTry:
             filehandle.write("%s\n" % beforeTryLine)
         for methodCount in methodDict:
@@ -51,6 +64,7 @@ def main():
                     filehandle.write("%s\n" % protectedDict[methodPro][linePro])
 
 
+# method to convert .smali to list, return List and highest Variable name
 def getFileList(filepath):
     tempList = []
     tempInt = 0
@@ -65,6 +79,7 @@ def getFileList(filepath):
     return tempList, tempInt
 
 
+# method to get all protected method into a dict of list
 def getProtectedMethod(fileList):
     tempDict = {}
     tempList = []
@@ -84,6 +99,7 @@ def getProtectedMethod(fileList):
     return tempDict, tempInt
 
 
+# method to get all private and public methods into a dict of list
 def getTryContent(fileList):
     tempDict = {}
     tempList = []
@@ -107,6 +123,7 @@ def getTryContent(fileList):
     return tempDict, tempInt
 
 
+# method to get randomised junk Try code and multiple Exception Catch filler code
 def randomTry(startV):
     methodList = []
     randomElement = random.randrange(2, 9)
@@ -136,6 +153,7 @@ def randomTry(startV):
     )
     methodList.append("")
 
+    # loop to add random number of element into List in Try code
     for element in range(randomElement):
         methodList.append(
             b"    const/16 v".decode("utf-8")
@@ -160,6 +178,8 @@ def randomTry(startV):
             + b"}, Ljava/util/List;->add(Ljava/lang/Object;)Z".decode("utf-8")
         )
         methodList.append("")
+
+    # force an error here, in this case index out of bound
     methodList.append(
         b"    const/16 v".decode("utf-8") + str(startV + 1) + b", 0x14".decode("utf-8")
     )
@@ -190,6 +210,8 @@ def randomTry(startV):
     methodList.append("")
     methodList.append("    :" + label[labelCatchList[0]][1])
     methodList.append("")
+
+    # add all filler Exception Catch, this works because only first Catch is Exception. Therefore, in any type of Error, Exception takes precedence and only first Catch is executed
     for error in range(len(getExceptionType())):
         methodList.append(
             b"    .catch Ljava/lang/".decode("utf-8")
@@ -212,6 +234,8 @@ def randomTry(startV):
         )
     )
     methodList.append("")
+
+    # filler code for Exception code for each Exception Error, which will never be exceuted
     for error in range(len(getExceptionType()) - 1):
         methodList.append(b"    :".decode("utf-8") + str(labelCatchList[error + 1]))
         methodList.append("")
@@ -250,6 +274,8 @@ def randomTry(startV):
             + str(startV + 1)
             + b'    # "secret":I'.decode("utf-8")
         )
+
+    # the only Exception Catch which will executed
     methodList.append(b"    :".decode("utf-8") + str(labelCatchList[0]))
     methodList.append(b"    move-exception v".decode("utf-8") + str(startV))
     methodList.append("")
@@ -263,6 +289,8 @@ def randomTry(startV):
     return methodList, startV + 2
 
 
+# method to get a randomised label name in each script run
+# Example: {:c416ab2e .. :5eeca7a5} :9085e754
 def labelTryExcept(number):
     TryExceptDict = {}
     tryLabel = ""
@@ -288,6 +316,7 @@ def labelTryExcept(number):
     return TryExceptDict
 
 
+# method to modify Exception Error easily and return List
 def getExceptionType():
     tempList = [
         "Exception",
@@ -349,4 +378,4 @@ def getExceptionType():
 
 
 if __name__ == "__main__":
-    main()
+    main(inputfile, outputfile)
