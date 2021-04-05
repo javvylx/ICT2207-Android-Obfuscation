@@ -5,6 +5,23 @@ import cmdFunctions as cf
 import try_catch_obfuscator as tco
 app = Flask(__name__)
 
+fileName = ''
+path = os.getcwd()
+UPLOAD_FOLDER = os.path.join(path, 'uploads')
+ALLOWED_EXTENSIONS = {'java', 'apk', 'smali'}
+
+if not os.path.isdir(UPLOAD_FOLDER):
+    os.mkdir(UPLOAD_FOLDER)
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def find_files(filename, search_path):
+   result = []
+
+   for root, dir, files in os.walk(search_path):
+      if filename in files:
+         result.append(os.path.join(root, filename))
+   return result
 
 @app.route('/')
 def uploadFile():
