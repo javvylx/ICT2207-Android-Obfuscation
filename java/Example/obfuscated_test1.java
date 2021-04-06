@@ -26,7 +26,7 @@ public class Main {
             case 3:
                 ljfhqukbrh.njstbmyuuq();
                 break;
-            case  4:
+            case 4:
                 ljfhqukbrh.osjttmprkv();
                 break;
                     default:
