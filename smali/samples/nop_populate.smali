@@ -6,7 +6,7 @@
 # direct methods
 .method public constructor <init>()V
     .locals 0
-	nop
+
     invoke-direct {p0}, Landroidx/appcompat/app/AppCompatActivity;-><init>()V
 
     return-void
@@ -17,39 +17,39 @@
 .method public fun(I)I
     .locals 4
     .param p1, "n"    # I
-
+	nop
     const/4 v0, 0x0
 
     .local v0, "i":I
     const/4 v1, 0x0
-	nop
+
     .local v1, "j":I
     const/4 v2, 0x0
 
     .local v2, "tmp":I
     const/4 v0, 0x0
-	nop
+
 #    :goto_0
 #    if-ge v0, p1, :cond_1
-
+	nop
     const/4 v1, 0x0
 
 #    :goto_1
 #    if-ge v1, p1, :cond_0
 
     add-int/2addr v2, v1
-
+	nop
     const-string v3, "WORLD"
 
     invoke-static {v3, v3}, Landroid/util/Log;->v(Ljava/lang/String;Ljava/lang/String;)I
-	nop
+
     add-int/lit8 v1, v1, 0x1
-
+	nop
 #    goto :goto_1
-
+	nop
     :cond_0
     add-int/lit8 v0, v0, 0x1
-	nop
+
 #    goto :goto_0
 
     :cond_1
@@ -61,35 +61,35 @@
     .param p1, "savedInstanceState"    # Landroid/os/Bundle;
 
     const/16 v0, 0xa
-
+	nop
     invoke-virtual {p0, v0}, Lcom/example/x08part2/MainActivity;->fun(I)I
 
     move-result v0
 
     .local v0, "i":I
     new-instance v1, Ljava/lang/StringBuilder;
-	nop
-    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
 
+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
+	nop
     const-string v2, "value: "
 	nop
     invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-	nop
+
     invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
 
     invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 
     move-result-object v1
-
+	nop
     const-string v2, "MYINT"
 
     invoke-static {v2, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
-	nop
-    invoke-super {p0, p1}, Landroidx/appcompat/app/AppCompatActivity;->onCreate(Landroid/os/Bundle;)V
 
+    invoke-super {p0, p1}, Landroidx/appcompat/app/AppCompatActivity;->onCreate(Landroid/os/Bundle;)V
+	nop
     const v1, 0x7f0b001c
 
     invoke-virtual {p0, v1}, Lcom/example/x08part2/MainActivity;->setContentView(I)V
-	nop
+
     return-void
 .end method

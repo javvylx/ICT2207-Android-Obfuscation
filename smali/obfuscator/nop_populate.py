@@ -1,8 +1,8 @@
 import random
+import smali_iterator
 
 smaliList = []  # define an empty list
 empty_index = []
-
 infile = "../samples/test_removed_line.smali"
 outfile = "../samples/nop_populate.smali"
 
@@ -12,25 +12,18 @@ def main():
         addNops(fin, fout)
 
 
-def writeFileToList(fin):
-    for line in fin:
-        currentNode = line[:-1]  # remove linebreak which is the last character of the string
-        smaliList.append(currentNode)  # Add items to the list
-    return smaliList
-
-
 def addNops(fin, fout):
-    writeFileToList(fin)
-    for i in range(len(smaliList)):
-        if smaliList[i] == '':
+    # writeFileToList(fin)
+    iterList = smali_iterator.populateList(fin)
+    for i in range(len(iterList)):
+        if iterList[i] == '':
             empty_index.append(i)
-
-    random_indexes = random.sample(empty_index, 10)  # Randomize 5 line locations
+    random_indexes = random.sample(empty_index, 10)  # Randomize 10 line locations
 
     for i in random_indexes:  # In the random list, do a loop and add in nops
-        smaliList[i] = "\tnop"
+        iterList[i] = "\tnop"
 
-    fout.write("\n".join(smaliList))
+    fout.write("\n".join(iterList))
 
 
 if __name__ == '__main__':
