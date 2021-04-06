@@ -54,6 +54,91 @@ def removeComment(line):
         line = ""
     return line
 
+def renameVar(inputFilePath, outputFilePath):
+    classNameDict = {}
+    methodNameDict = {}
+    varNameDict = {}
+
+    # Create output file
+    outFile = open(outputFilePath, "w", encoding="utf-8")   
+
+    # Open file
+    with open(inputFilePath) as javaFile:
+
+        for line in javaFile:
+            # CLASS
+            className = getClassName(line)
+            if className is not None and className != "Main":
+                # Create random word to replace class name
+                word = randomWord()
+                classNameDict[className] = word
+
+            # METHOD
+            methodName = getMethodName(line)
+            if methodName is not None and methodName != ("main" or "Main"):
+                # Create random word to replace class name
+                word = randomWord()
+                methodNameDict[methodName] = word
+
+            # VARIABLE
+            varName = getVarName(line)
+            if varName is not None:
+                for i in varName:
+                    if i != ("break" or "continue"):
+                        word = randomWord()
+                        varNameDict[i] = word
+
+        # Set file pointer back to start
+        javaFile.seek(0)
+
+        
+        for line in javaFile:
+            # outFile.write("test")
+            # Get class name and random word value in dictionary
+            for cname, new in classNameDict.items():
+                
+            #     # class name .... {
+                initialClass = re.match(rf'\w+?\sclass\s({cname})', line)
+
+                # name n = new name()
+                newClass = re.match(rf'((\s+)?{cname})\s\w+(\s)?=(\s)?new\s({cname})\(.*\)', line)
+
+                # name() or name().a
+                callClass = re.match(rf'(\s+)?.*?({cname})\(.*\)(\.\w+)?', line)
+
+                # Change class name to random word based on re.match
+                if initialClass or newClass or callClass is not None:
+                    # rearrange(line)
+                    line = re.sub(rf'({cname})', new, line)
+            
+            # Get method name and random word value in dictionary    
+            for method, new in methodNameDict.items():
+
+                # (public) (static) <type> name (){
+                initialMethod = re.match(rf'(\s+)?(public\s|private\s|protected\s)?(static\s|final\s)?(void|int|String|boolean|byte|char|short|long|float|double|File)\s({method})', line)
+                # method() or a.method()
+                callMethod = re.match(rf'(\s+)?(\w+)?\.?({method})\(.*\)', line)
+                
+                if initialMethod or callMethod is not None:
+                    line = re.sub(rf'({method})', new, line)
+
+            # Get variable name and random word value in dictionary    
+            for variable, new in varNameDict.items()   :
+                varFound = re.search(rf'[^\.\"\'](this.)?\b{variable}\b[^\"\']', line)
+                
+                if varFound is not None:
+                    line = re.sub(rf'\b({variable})\b', new, line)
+
+            
+            # Remove all comments
+            line = removeComment(line)
+
+            outFile.write(line)
+
+    # Close files that are not used
+    outFile.close()
+    inFile.close()
+
 
 def obfSoutLn(soutLn):
     RTL=u'\u202E'
@@ -238,98 +323,9 @@ def obfImport(line):
     return tempStr
 
 def main():
-    filename = "./test/toObfuscate.java"
-    outFile = open("./test/obfuscated.java", "w", encoding="utf-8")
-    # Dictionary to store name : replacement word
-    
-    classNameDict = {}
-    methodNameDict = {}
-    varNameDict = {}
 
-    # Open file
-
-    with open(filename) as javaFile:
-
-        for line in javaFile:
-            # CLASS
-            className = getClassName(line)
-            if className is not None and className != "Main":
-                # Create random word to replace class name
-                word = randomWord()
-                classNameDict[className] = word
-
-            # METHOD
-            methodName = getMethodName(line)
-            if methodName is not None and methodName != ("main" or "Main"):
-                # Create random word to replace class name
-                word = randomWord()
-                methodNameDict[methodName] = word
-
-            # VARIABLE
-            varName = getVarName(line)
-            if varName is not None:
-                for i in varName:
-                    if i != ("break" or "continue"):
-                        word = randomWord()
-                        varNameDict[i] = word
-
-        # Set file pointer back to start
-        javaFile.seek(0)
-
-        # Create output file
-        # outFile = open("./test/obfuscated.java", "w", encoding="utf-8")
-        
-        for line in javaFile:
-            # outFile.write("test")
-            # Get class name and random word value in dictionary
-            for cname, new in classNameDict.items():
-                
-            #     # class name .... {
-                initialClass = re.match(rf'\w+?\sclass\s({cname})', line)
-
-                # name n = new name()
-                newClass = re.match(rf'((\s+)?{cname})\s\w+(\s)?=(\s)?new\s({cname})\(.*\)', line)
-
-                # name() or name().a
-                callClass = re.match(rf'(\s+)?.*?({cname})\(.*\)(\.\w+)?', line)
-
-                # Change class name to random word based on re.match
-                if initialClass or newClass or callClass is not None:
-                    # rearrange(line)
-                    line = re.sub(rf'({cname})', new, line)
-            
-            # Get method name and random word value in dictionary    
-            for method, new in methodNameDict.items():
-
-                # (public) (static) <type> name (){
-                initialMethod = re.match(rf'(\s+)?(public\s|private\s|protected\s)?(static\s|final\s)?(void|int|String|boolean|byte|char|short|long|float|double|File)\s({method})', line)
-                # method() or a.method()
-                callMethod = re.match(rf'(\s+)?(\w+)?\.?({method})\(.*\)', line)
-                
-                if initialMethod or callMethod is not None:
-                    line = re.sub(rf'({method})', new, line)
-
-            # Get variable name and random word value in dictionary    
-            for variable, new in varNameDict.items()   :
-                varFound = re.search(rf'[^\.\"\'](this.)?\b{variable}\b[^\"\']', line)
-                
-                if varFound is not None:
-                    line = re.sub(rf'\b({variable})\b', new, line)
-
-            
-            # Remove all comments
-            line = removeComment(line)
-
-            
-            # System.out.println -- to take into account the changing of variable name
-            
-
-            outFile.write(line)
-
-    # Close files that are not used
-    outFile.close()
-    javaFile.close()
-
+    # NOTE TO ZF: Replace input and output file paths with your user input file path
+    renameVar("input file directory","output file directory")
     runObfImport("input file directory","output file directory")
     runObfSout("input file directory","output file directory")
 
