@@ -3,7 +3,8 @@ import smali_iterator
 
 smaliList = []  # define an empty list
 empty_index = []
-infile = "../samples/test_removed_line.smali"
+
+infile = "../samples/test.smali"
 outfile = "../samples/nop_populate.smali"
 
 
@@ -21,7 +22,7 @@ def addNops(fin, fout):
     random_indexes = random.sample(empty_index, 10)  # Randomize 10 line locations
 
     for i in random_indexes:  # In the random list, do a loop and add in nops
-        iterList[i] = "\tnop"
+        iterList[i] = "\tnop\n\tnop\n\tnop\n\tnop\n\tnop\n"
 
     fout.write("\n".join(iterList))
 
