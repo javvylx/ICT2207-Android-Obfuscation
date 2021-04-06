@@ -55,6 +55,9 @@ def uploader():
 
       else:
          return redirect(request.url)
+   
+   else:
+      return render_template('uploadFile.html', notice='No file selected. Please upload a file.')
 
 @app.route('/apk/<filename>')
 def apkFile(filename):
