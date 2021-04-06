@@ -14,8 +14,12 @@
                 </div>
                 <form method="POST" action="#">
                     <div class="center col s12">
-                        <button type="decompile" name="decompile" value="submit"
-                        class="btn center waves-effect waves-light black login-button s12">Obfuscate</button>
+                        <label for="home" class='btn center waves-effect waves-light black login-button s6'>Home</label>
+                        <input type = "submit" id = "home" name='smaliButton' value='home' hidden>
+
+                        <label for="obfuscate" class='btn center waves-effect waves-light black login-button s6'>Obfuscate</label>
+                        <input type = "submit" id = "obfuscate" name='smaliButton' value='obfuscate' hidden>
+
                     </div>
                 </form>
                 
@@ -28,6 +32,10 @@
                     <h5 class="left">Obfuscated File Contents</h5>
                     <textarea name="obfuscated" id="obfuscated" rows="100" style="width: 600px; height: 250px;" disabled>{{ obfuscatedContents }}</textarea>
                 </div>
+
+                <h6 class="center">Obfuscation Time: {{ oTime }}</h6>
+
+                <h6 class="center">File size difference: {{ size }}</h6>
                 
             </div>
 

@@ -18,7 +18,6 @@ def uploadFile():
 def decompile(filename):
     os.system("cmd /c java -jar apktool.jar d -f \"" + filename + "\"")
 def recompile(filename):
-    print(filename)
     os.system("cmd /c java -jar apktool.jar b -f -d \"" + filename + "\"")
 def obfuscate():
     Screen().printf("obfuscate function: " + filename)

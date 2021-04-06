@@ -10,22 +10,31 @@
                 <h4 class="center">Code Obfuscator App - Java File</h4>
                 <div class="input-field col s12">
                     <input id="filename" name="filename" type="text" class="validate">
-                    <label for="filename1" class="center">Selected File</label>
+                    <label for="filename1" class="center">{{ 'Selected File: ' + filename }}</label>
                 </div>
-                <div class="center col s12">
-                    <button type="decompile" name="decompile" value="submit"
-                    class="btn center waves-effect waves-light black login-button s12">Obfuscate</button>
+                <form method="POST" action="#">
+                    <div class="center col s12">
+                        <label for="home" class='btn center waves-effect waves-light black login-button s6'>Home</label>
+                        <input type = "submit" id = "home" name='javaButton' value='home' hidden>
+
+                        <label for="obfuscate" class='btn center waves-effect waves-light black login-button s6'>Obfuscate</label>
+                        <input type = "submit" id = "obfuscate" name='javaButton' value='obfuscate' hidden>
+                    </div>
+                </form>
+                
+                <div class="input-field col m12">
+                    <h5 class="left">Original File Contents</h5>
+                    <textarea name="original" id="original" rows="100" style="width: 600px; height: 250px;" disabled>{{ originalContents }}</textarea>
                 </div>
 
-                <div class="input-field col s12">
-                    <input id="original" name="original" type="text" class="input-lg" disabled/>
-                    <label for="original">File Contents</label>
+                <div class="input-field col m12">
+                    <h5 class="left">Obfuscated File Contents</h5>
+                    <textarea name="obfuscated" id="obfuscated" rows="100" style="width: 600px; height: 250px;" disabled>{{ obfuscatedContents }}</textarea>
                 </div>
 
-                <div class="input-field col s12">
-                    <input id="obfuscated" name="obfuscated" type="text" class="input-lg" disabled/>
-                    <label for="obfuscated">Obfuscated File Contents</label>
-                </div>
+                <h6 class="center">Obfuscation Time: {{ oTime }}</h6>
+
+                <h6 class="center">File size difference: {{ size }}</h6>
             </div>
         </div>
     </div>

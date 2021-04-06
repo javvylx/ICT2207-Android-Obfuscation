@@ -38,8 +38,7 @@ def searchWord(count, strippedparam):
 
 def populateList(fp):
     for line in fp:
-        currentNode = line[:
-                           -1]  # remove linebreak which is the last character of the string
+        currentNode = line[:-1]  # remove linebreak which is the last character of the string
         # add item to the list
         smaliList.append(currentNode)  # Add items to the list
     return smaliList
