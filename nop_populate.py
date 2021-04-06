@@ -16,7 +16,7 @@ def addNops(inFile, outFile):
         random_indexes = random.sample(empty_index, 10)  # Randomize 10 line locations
 
         for i in random_indexes:  # In the random list, do a loop and add in nops
-            iterList[i] = "\tnop"
+            iterList[i] = "nop"
         
         fin.close()
 

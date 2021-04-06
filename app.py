@@ -5,6 +5,7 @@ import cmdFunctions as cf
 import try_catch_obfuscator as tco
 import nop_populate as np
 import time
+import java_obfuscator as jo
 app = Flask(__name__)
 
 fileName = ''
@@ -48,11 +49,11 @@ def uploader():
          
          elif fileType[1] == 'smali':
             return redirect(url_for('smaliFile', filename=fileName))
-         # elif fileType[1] == 'java':
-         #    return render_template('javaFile.html', filename=f.filename)
+
+         elif fileType[1] == 'java':
+            return redirect(url_for('javaFile', filename=fileName))
 
       else:
-         flash('No file uploaded')
          return redirect(request.url)
 
 @app.route('/apk/<filename>')
@@ -97,18 +98,40 @@ def apkAction(filename):
          return render_template('apkFile.html', filename=filename, originalContents=originalContents, obfuscatedContents=obfuscatedContents, oTime=str(round((end-start)*1000, 2))+'ms', size=sizePercent)
    return render_template('apkFile.html', filename=filename)
 
-@app.route('/java')
-def javaFile():
+@app.route('/java/<filename>')
+def javaFile(filename):
+   return render_template('javaFile.html', filename=filename)
+
+@app.route('/java/<filename>', methods = ['GET', 'POST'])
+def javaAction(filename):
    if request.method == 'POST':
       if request.form['javaButton'] == 'obfuscate':
-         fileDecompile = find_files(filename, './uploads/')[0]
-         cf.decompile(fileDecompile)
-         return render_template('uploadFile.html', notice='Decompiled ' + filename)
+         javaFile = find_files(filename, './uploads/')[0]
+         rawFilename = javaFile.split('/')[-1]
+         start = time.time()
+         jo.main(javaFile, './uploads/obfuscated_' + rawFilename)
+         end = time.time()
+         with open('./uploads/'+rawFilename, 'r', encoding='utf-8-sig') as file:
+            originalContents = file.read()
+            file.close()
+         
+         with open('./uploads/obfuscated_'+rawFilename, 'r', encoding='utf-8-sig') as file:
+            obfuscatedContents = file.read()
+            file.close()
+
+         originalSize = os.stat('./uploads/'+rawFilename).st_size
+         obfuscatedSize = os.stat('./uploads/obfuscated_'+rawFilename).st_size
+         sizeDiff = (obfuscatedSize/originalSize) * 100
+         if sizeDiff > 0:
+            sizePercent = '+' + str(round(sizeDiff,2)) + '%'
+         
+         else:
+            sizePercent = '-' + str(round(sizeDiff,2)) + '%'
       
       else:
          return render_template('uploadFile.html')
 
-   return render_template('javaFile.html')
+   return render_template('javaFile.html', filename=filename, originalContents=originalContents, obfuscatedContents=obfuscatedContents, oTime=str(round((end-start)*1000, 2))+'ms', size=sizePercent)
 
 @app.route('/smali/<filename>')
 def smaliFile(filename):
