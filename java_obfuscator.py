@@ -247,10 +247,10 @@ def addUnicode(line):
 def runObfSout(inFile,outFile):
     # TODO CHANGE TO RELEVANT INPUT AND OUTPUT
     filename = inFile
-    outFile = open(outFile, "w", encoding="utf-8")
+    tempOutFile = open("./uploads/temp.txt", "w", encoding="utf-8")
     soutNameDict = {}
 
-    with open(filename) as javaFile:
+    with open(filename, 'r', encoding="utf-8") as javaFile:
 
         for line in javaFile:
             soutLn = getSoutLn(line)
@@ -261,12 +261,20 @@ def runObfSout(inFile,outFile):
             for sout, new in soutNameDict.items():
                 line = re.sub(rf'({re.escape(sout)})', new, line)
     
-            outFile.write(line)
+            tempOutFile.write(line)
+
+    tempOutFile.close()
+    # TODO CHANGE TO OUTPUT FILE
+    if(os.path.isfile(outFile)):
+        os.remove(outFile)
+
+    # TODO CHANGE TO OUTPUT FILE DUN Change temp.txt
+    os.rename(r'./uploads/temp.txt',outFile)
 
 def runObfImport(inFile,outFile):
     # TODO CHANGE TO RELEVANT INPUT AND OUTPUT
     filename = inFile
-    tempOutFile = open(outFile, "w+", encoding="utf-8")
+    tempOutFile = open("./uploads/temp.txt", "w", encoding="utf-8")
 
     with open(filename, "r",  encoding="utf-8") as File:
         impNameDict = {}
@@ -289,7 +297,6 @@ def runObfImport(inFile,outFile):
                 for i,line in enumerate(lines):
                     # print(line)
                     if(re.search(rf'({re.escape(imp)})', line)):
-                        print(i)
                         temp = i
                     lines[i] = re.sub(rf'({re.escape(imp)})', new, line)
                     
@@ -311,7 +318,7 @@ def runObfImport(inFile,outFile):
         os.remove(outFile)
 
     # TODO CHANGE TO OUTPUT FILE DUN Change temp.txt
-    os.rename(r'./test/temp.txt',r'./test/obfuscatedImport.java')
+    os.rename(r'./uploads/temp.txt',outFile)
 
 def obfImport(line):
     tempStr=""
@@ -326,9 +333,9 @@ def main(inFile, outFile):
 
     # NOTE TO ZF: Replace input and output file paths with your user input file path
     renameVar(inFile, outFile)
-    runObfImport(inFile, outFile)
-    runObfSout(inFile, outFile)
+    runObfImport(outFile, outFile)
+    runObfSout(outFile, outFile)
 
 if __name__ == "__main__":
-    main()
+    main('./java/Example/test1.java', './uploads/testing2.java')
 
