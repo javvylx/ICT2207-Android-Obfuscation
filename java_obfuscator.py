@@ -40,10 +40,10 @@ def getImport(lineArr):
             res.append(line)
     return res
 
-# Return random word from lowercase letters, length 10
+# Return random word from lowercase letters, length 12
 def randomWord():
     letters = string.ascii_lowercase
-    return ''.join(random.choice(letters) for i in range(10))
+    return ''.join(random.choice(letters) for i in range(12))
 
 def removeComment(line):
     if re.search('.*(\/\/)', line):
@@ -58,6 +58,7 @@ def renameVar(inputFilePath, outputFilePath):
     classNameDict = {}
     methodNameDict = {}
     varNameDict = {}
+    counter = 1
 
     # Create output file
     outFile = open(outputFilePath, "w", encoding="utf-8")   
@@ -70,30 +71,32 @@ def renameVar(inputFilePath, outputFilePath):
             className = getClassName(line)
             if className is not None and className != "Main":
                 # Create random word to replace class name
-                word = randomWord()
+                word = '$'+ ('\u200E' * counter)
                 classNameDict[className] = word
+                counter +=1
 
             # METHOD
             methodName = getMethodName(line)
             if methodName is not None and methodName != ("main" or "Main"):
                 # Create random word to replace class name
-                word = randomWord()
+                word = '$'+ ('\u200E' * counter)
                 methodNameDict[methodName] = word
+                counter += 1
 
             # VARIABLE
             varName = getVarName(line)
             if varName is not None:
                 for i in varName:
                     if i != ("break" or "continue"):
-                        word = randomWord()
+                        word = '$'+ ('\u200E' * counter)
                         varNameDict[i] = word
+                        counter += 1
 
         # Set file pointer back to start
         javaFile.seek(0)
 
         
         for line in javaFile:
-            # outFile.write("test")
             # Get class name and random word value in dictionary
             for cname, new in classNameDict.items():
                 
@@ -125,9 +128,9 @@ def renameVar(inputFilePath, outputFilePath):
             # Get variable name and random word value in dictionary    
             for variable, new in varNameDict.items()   :
                 varFound = re.search(rf'[^\.\"\'](this.)?\b{variable}\b[^\"\']', line)
-                
+
                 if varFound is not None:
-                    line = re.sub(rf'\b({variable})\b', new, line)
+                    line = re.sub(rf'\b{variable}\b', new, line)
 
             
             # Remove all comments
@@ -297,6 +300,7 @@ def runObfImport(inFile,outFile):
                 for i,line in enumerate(lines):
                     # print(line)
                     if(re.search(rf'({re.escape(imp)})', line)):
+                        print(i)
                         temp = i
                     lines[i] = re.sub(rf'({re.escape(imp)})', new, line)
                     
@@ -330,8 +334,6 @@ def obfImport(line):
     return tempStr
 
 def main(inFile, outFile):
-
-    # NOTE TO ZF: Replace input and output file paths with your user input file path
     renameVar(inFile, outFile)
     runObfImport(outFile, outFile)
     runObfSout(outFile, outFile)
