@@ -7,8 +7,8 @@ infile = "../samples/test_try_catch.smali"
 outfile = "../samples/final.smali"
 
 
-def main():
-    with open(infile, "r") as fin, open(outfile, "w") as fout:
+def nopFunction(inFile, outFile):
+    with open(inFile, "r") as fin, open(outFile, "w") as fout:
         finalList = []
         iterList = smali_iterator.populateList(fin)
 
@@ -37,6 +37,9 @@ def main():
                 finalList.append(m)
 
         fout.write("\n".join(finalList))
+
+    inFile.close()
+    outFile.close()
 
 
 def addNops(fin):
