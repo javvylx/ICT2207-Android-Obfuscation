@@ -40,10 +40,10 @@ def getImport(lineArr):
             res.append(line)
     return res
 
-# Return random word from lowercase letters, length 10
+# Return random word from lowercase letters, length 12
 def randomWord():
     letters = string.ascii_lowercase
-    return ''.join(random.choice(letters) for i in range(10))
+    return ''.join(random.choice(letters) for i in range(12))
 
 def removeComment(line):
     if re.search('.*(\/\/)', line):
@@ -58,6 +58,7 @@ def renameVar(inputFilePath, outputFilePath):
     classNameDict = {}
     methodNameDict = {}
     varNameDict = {}
+    counter = 1
 
     # Create output file
     outFile = open(outputFilePath, "w", encoding="utf-8")   
@@ -70,30 +71,32 @@ def renameVar(inputFilePath, outputFilePath):
             className = getClassName(line)
             if className is not None and className != "Main":
                 # Create random word to replace class name
-                word = randomWord()
+                word = '$'+ ('\u200E' * counter)
                 classNameDict[className] = word
+                counter +=1
 
             # METHOD
             methodName = getMethodName(line)
             if methodName is not None and methodName != ("main" or "Main"):
                 # Create random word to replace class name
-                word = randomWord()
+                word = '$'+ ('\u200E' * counter)
                 methodNameDict[methodName] = word
+                counter += 1
 
             # VARIABLE
             varName = getVarName(line)
             if varName is not None:
                 for i in varName:
                     if i != ("break" or "continue"):
-                        word = randomWord()
+                        word = '$'+ ('\u200E' * counter)
                         varNameDict[i] = word
+                        counter += 1
 
         # Set file pointer back to start
         javaFile.seek(0)
 
         
         for line in javaFile:
-            # outFile.write("test")
             # Get class name and random word value in dictionary
             for cname, new in classNameDict.items():
                 
@@ -124,10 +127,11 @@ def renameVar(inputFilePath, outputFilePath):
 
             # Get variable name and random word value in dictionary    
             for variable, new in varNameDict.items()   :
-                varFound = re.search(rf'[^\.\"\'](this.)?\b{variable}\b[^\"\']', line)
+                varFound = re.search(rf'[^\.\"\'](this.)?{variable}[^\"\']', line)
+                # varFound = re.search(rf'[^\.\"\'](this.)?\b{variable}\b[^\"\']', line)
                 
                 if varFound is not None:
-                    line = re.sub(rf'\b({variable})\b', new, line)
+                    line = re.sub(rf'\b{variable}\b', new, line)
 
             
             # Remove all comments
@@ -137,7 +141,7 @@ def renameVar(inputFilePath, outputFilePath):
 
     # Close files that are not used
     outFile.close()
-    inFile.close()
+    javaFile.close()
 
 
 def obfSoutLn(soutLn):
@@ -247,7 +251,7 @@ def addUnicode(line):
 def runObfSout(input,output):
     # TODO CHANGE TO RELEVANT INPUT AND OUTPUT
     filename = "./test/toObfuscate.java"
-    outFile = open("./test/obfuscatedSout.java", "w", encoding="utf-8")
+    outFile = open("./test/whatisthis.java", "w", encoding="utf-8")
     soutNameDict = {}
 
     with open(filename) as javaFile:
@@ -307,11 +311,11 @@ def runObfImport(input,output):
     File.close()
 
     # TODO CHANGE TO OUTPUT FILE
-    if(os.path.isfile('./test/obfuscatedImport.java')):
-        os.remove('./test/obfuscatedImport.java')
+    if(os.path.isfile('./test/whatisthis.java')):
+        os.remove('./test/whatisthis.java')
 
     # TODO CHANGE TO OUTPUT FILE DUN Change temp.txt
-    os.rename(r'./test/temp.txt',r'./test/obfuscatedImport.java')
+    os.rename(r'./test/temp.txt',r'./test/whatisthis.java')
 
 def obfImport(line):
     tempStr=""
@@ -323,11 +327,13 @@ def obfImport(line):
     return tempStr
 
 def main():
+    i = "./test/toObfuscate.java"
+    o = "./test/whatisthis.java"
 
     # NOTE TO ZF: Replace input and output file paths with your user input file path
-    renameVar("input file directory","output file directory")
-    runObfImport("input file directory","output file directory")
-    runObfSout("input file directory","output file directory")
+    renameVar(i, o)
+    runObfImport(i, o)
+    runObfSout(i, o)
 
 if __name__ == "__main__":
     main()
