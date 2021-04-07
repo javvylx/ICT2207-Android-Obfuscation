@@ -5,7 +5,7 @@ import sys
 # # Run using: python smali/smali_iterator.py smali/samples/<<filename>> "<<search parameter>>" ##
 
 smaliList = []  # define an empty list
-
+validNopList = []
 
 def main():
     filepath = sys.argv[1]

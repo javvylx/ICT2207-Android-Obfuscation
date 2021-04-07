@@ -6,8 +6,8 @@ import re
 import os
 
 # edit here for filename variable
-inputfile = "smali/samples/test.smali"
-outputfile = "./smali/samples/test_try_except.smali"
+inputfile = "../samples/test.smali"
+outputfile = "../samples/test_try_catch.smali"
 
 # main function
 def main(inputfile, outputfile):
