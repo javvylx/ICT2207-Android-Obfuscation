@@ -127,9 +127,8 @@ def renameVar(inputFilePath, outputFilePath):
 
             # Get variable name and random word value in dictionary    
             for variable, new in varNameDict.items()   :
-                varFound = re.search(rf'[^\.\"\'](this.)?{variable}[^\"\']', line)
-                # varFound = re.search(rf'[^\.\"\'](this.)?\b{variable}\b[^\"\']', line)
-                
+                varFound = re.search(rf'[^\.\"\'](this.)?\b{variable}\b[^\"\']', line)
+
                 if varFound is not None:
                     line = re.sub(rf'\b{variable}\b', new, line)
 
@@ -248,13 +247,13 @@ def addUnicode(line):
     
     return "\\\\u0028".join([obfSout, obfStr])
 
-def runObfSout(input,output):
+def runObfSout(inFile,outFile):
     # TODO CHANGE TO RELEVANT INPUT AND OUTPUT
-    filename = "./test/toObfuscate.java"
-    outFile = open("./test/whatisthis.java", "w", encoding="utf-8")
+    filename = inFile
+    tempOutFile = open("./uploads/temp.txt", "w", encoding="utf-8")
     soutNameDict = {}
 
-    with open(filename) as javaFile:
+    with open(filename, 'r', encoding="utf-8") as javaFile:
 
         for line in javaFile:
             soutLn = getSoutLn(line)
@@ -265,12 +264,20 @@ def runObfSout(input,output):
             for sout, new in soutNameDict.items():
                 line = re.sub(rf'({re.escape(sout)})', new, line)
     
-            outFile.write(line)
+            tempOutFile.write(line)
 
-def runObfImport(input,output):
+    tempOutFile.close()
+    # TODO CHANGE TO OUTPUT FILE
+    if(os.path.isfile(outFile)):
+        os.remove(outFile)
+
+    # TODO CHANGE TO OUTPUT FILE DUN Change temp.txt
+    os.rename(r'./uploads/temp.txt',outFile)
+
+def runObfImport(inFile,outFile):
     # TODO CHANGE TO RELEVANT INPUT AND OUTPUT
-    filename = "./test/toObfuscate.java"
-    tempOutFile = open("./test/temp.txt", "w", encoding="utf-8")
+    filename = inFile
+    tempOutFile = open("./uploads/temp.txt", "w", encoding="utf-8")
 
     with open(filename, "r",  encoding="utf-8") as File:
         impNameDict = {}
@@ -311,11 +318,11 @@ def runObfImport(input,output):
     File.close()
 
     # TODO CHANGE TO OUTPUT FILE
-    if(os.path.isfile('./test/whatisthis.java')):
-        os.remove('./test/whatisthis.java')
+    if(os.path.isfile(outFile)):
+        os.remove(outFile)
 
     # TODO CHANGE TO OUTPUT FILE DUN Change temp.txt
-    os.rename(r'./test/temp.txt',r'./test/whatisthis.java')
+    os.rename(r'./uploads/temp.txt',outFile)
 
 def obfImport(line):
     tempStr=""
@@ -326,15 +333,11 @@ def obfImport(line):
         
     return tempStr
 
-def main():
-    i = "./test/toObfuscate.java"
-    o = "./test/whatisthis.java"
-
-    # NOTE TO ZF: Replace input and output file paths with your user input file path
-    renameVar(i, o)
-    runObfImport(i, o)
-    runObfSout(i, o)
+def main(inFile, outFile):
+    renameVar(inFile, outFile)
+    runObfImport(outFile, outFile)
+    runObfSout(outFile, outFile)
 
 if __name__ == "__main__":
-    main()
+    main('./java/Example/test1.java', './uploads/testing2.java')
 
