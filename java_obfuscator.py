@@ -40,10 +40,10 @@ def getImport(lineArr):
             res.append(line)
     return res
 
-# Return random word from lowercase letters, length 12
+# Return random word from lowercase letters, length 10
 def randomWord():
     letters = string.ascii_lowercase
-    return ''.join(random.choice(letters) for i in range(12))
+    return ''.join(random.choice(letters) for i in range(10))
 
 def removeComment(line):
     if re.search('.*(\/\/)', line):
@@ -58,7 +58,6 @@ def renameVar(inputFilePath, outputFilePath):
     classNameDict = {}
     methodNameDict = {}
     varNameDict = {}
-    counter = 1
 
     # Create output file
     outFile = open(outputFilePath, "w", encoding="utf-8")   
@@ -71,32 +70,30 @@ def renameVar(inputFilePath, outputFilePath):
             className = getClassName(line)
             if className is not None and className != "Main":
                 # Create random word to replace class name
-                word = '$'+ ('\u200E' * counter)
+                word = randomWord()
                 classNameDict[className] = word
-                counter +=1
 
             # METHOD
             methodName = getMethodName(line)
             if methodName is not None and methodName != ("main" or "Main"):
                 # Create random word to replace class name
-                word = '$'+ ('\u200E' * counter)
+                word = randomWord()
                 methodNameDict[methodName] = word
-                counter += 1
 
             # VARIABLE
             varName = getVarName(line)
             if varName is not None:
                 for i in varName:
                     if i != ("break" or "continue"):
-                        word = '$'+ ('\u200E' * counter)
+                        word = randomWord()
                         varNameDict[i] = word
-                        counter += 1
 
         # Set file pointer back to start
         javaFile.seek(0)
 
         
         for line in javaFile:
+            # outFile.write("test")
             # Get class name and random word value in dictionary
             for cname, new in classNameDict.items():
                 
@@ -127,11 +124,10 @@ def renameVar(inputFilePath, outputFilePath):
 
             # Get variable name and random word value in dictionary    
             for variable, new in varNameDict.items()   :
-                varFound = re.search(rf'[^\.\"\'](this.)?{variable}[^\"\']', line)
-                # varFound = re.search(rf'[^\.\"\'](this.)?\b{variable}\b[^\"\']', line)
+                varFound = re.search(rf'[^\.\"\'](this.)?\b{variable}\b[^\"\']', line)
                 
                 if varFound is not None:
-                    line = re.sub(rf'\b{variable}\b', new, line)
+                    line = re.sub(rf'\b({variable})\b', new, line)
 
             
             # Remove all comments
@@ -248,13 +244,13 @@ def addUnicode(line):
     
     return "\\\\u0028".join([obfSout, obfStr])
 
-def runObfSout(input,output):
+def runObfSout(inFile,outFile):
     # TODO CHANGE TO RELEVANT INPUT AND OUTPUT
-    filename = "./test/toObfuscate.java"
-    outFile = open("./test/whatisthis.java", "w", encoding="utf-8")
+    filename = inFile
+    tempOutFile = open("./uploads/temp.txt", "w", encoding="utf-8")
     soutNameDict = {}
 
-    with open(filename) as javaFile:
+    with open(filename, 'r', encoding="utf-8") as javaFile:
 
         for line in javaFile:
             soutLn = getSoutLn(line)
@@ -265,12 +261,20 @@ def runObfSout(input,output):
             for sout, new in soutNameDict.items():
                 line = re.sub(rf'({re.escape(sout)})', new, line)
     
-            outFile.write(line)
+            tempOutFile.write(line)
 
-def runObfImport(input,output):
+    tempOutFile.close()
+    # TODO CHANGE TO OUTPUT FILE
+    if(os.path.isfile(outFile)):
+        os.remove(outFile)
+
+    # TODO CHANGE TO OUTPUT FILE DUN Change temp.txt
+    os.rename(r'./uploads/temp.txt',outFile)
+
+def runObfImport(inFile,outFile):
     # TODO CHANGE TO RELEVANT INPUT AND OUTPUT
-    filename = "./test/toObfuscate.java"
-    tempOutFile = open("./test/temp.txt", "w", encoding="utf-8")
+    filename = inFile
+    tempOutFile = open("./uploads/temp.txt", "w", encoding="utf-8")
 
     with open(filename, "r",  encoding="utf-8") as File:
         impNameDict = {}
@@ -293,7 +297,6 @@ def runObfImport(input,output):
                 for i,line in enumerate(lines):
                     # print(line)
                     if(re.search(rf'({re.escape(imp)})', line)):
-                        print(i)
                         temp = i
                     lines[i] = re.sub(rf'({re.escape(imp)})', new, line)
                     
@@ -311,11 +314,11 @@ def runObfImport(input,output):
     File.close()
 
     # TODO CHANGE TO OUTPUT FILE
-    if(os.path.isfile('./test/whatisthis.java')):
-        os.remove('./test/whatisthis.java')
+    if(os.path.isfile(outFile)):
+        os.remove(outFile)
 
     # TODO CHANGE TO OUTPUT FILE DUN Change temp.txt
-    os.rename(r'./test/temp.txt',r'./test/whatisthis.java')
+    os.rename(r'./uploads/temp.txt',outFile)
 
 def obfImport(line):
     tempStr=""
@@ -326,15 +329,13 @@ def obfImport(line):
         
     return tempStr
 
-def main():
-    i = "./test/toObfuscate.java"
-    o = "./test/whatisthis.java"
+def main(inFile, outFile):
 
     # NOTE TO ZF: Replace input and output file paths with your user input file path
-    renameVar(i, o)
-    runObfImport(i, o)
-    runObfSout(i, o)
+    renameVar(inFile, outFile)
+    runObfImport(outFile, outFile)
+    runObfSout(outFile, outFile)
 
 if __name__ == "__main__":
-    main()
+    main('./java/Example/test1.java', './uploads/testing2.java')
 
