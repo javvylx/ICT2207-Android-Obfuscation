@@ -84,8 +84,8 @@ def apkAction(filename):
             file.close()
          start = time.time()
          originalSize = os.stat(filePath).st_size
-         # np.addNops(filePath, filePath)
          tco.main(filePath, filePath)
+         np.nopFunction(filePath, filePath)
          end = time.time()
          with open(filePath, 'r', encoding='utf-8-sig') as file:
             obfuscatedContents = file.read()
@@ -150,8 +150,8 @@ def smaliAction(filename):
          smaliFile = find_files(filename, './uploads/')[0]
          rawFilename = smaliFile.split('/')[-1]
          start = time.time()
-         # np.addNops(smaliFile, smaliFile)
          tco.main(smaliFile, './uploads/obfuscated_'+rawFilename)
+         np.nopFunction('./uploads/obfuscated_'+rawFilename, './uploads/obfuscated_'+rawFilename)
          end = time.time()
          
          with open('./uploads/'+rawFilename, 'r', encoding='utf-8-sig') as file:
