@@ -8,15 +8,9 @@ import io
 import secrets
 import os 
 
-def getClassName(line):
-    res = None
-    if re.search('class\s\w+', line):
-        res = re.search('class\s(\w+)', line).group(1)
-    return res
-
 def getMethodName(line):
     res = None
-    if re.search('(public\s|private\s|protected\s)?(static\s|final\s)?(void|int|String|boolean|byte|char|short|long|float|double|File)\s\w+\(.*\)', line):
+    if re.search('(public\s|private\s)?(static\s|final\s)?(void|int|String|boolean|byte|char|short|long|float|double|File)\s\w+\(.*\)', line):
         res = re.search('\s(\w+)\(.*\)', line).group(1)
     return res
 
@@ -40,10 +34,6 @@ def getImport(lineArr):
             res.append(line)
     return res
 
-# Return random word from lowercase letters, length 12
-def randomWord():
-    letters = string.ascii_lowercase
-    return ''.join(random.choice(letters) for i in range(12))
 
 def removeComment(line):
     if re.search('.*(\/\/)', line):
@@ -65,21 +55,12 @@ def renameVar(inputFilePath, outputFilePath):
 
     # Open file
     with open(inputFilePath) as javaFile:
-
         for line in javaFile:
-            # CLASS
-            className = getClassName(line)
-            if className is not None and className != "Main":
-                # Create random word to replace class name
-                word = '$'+ ('\u200E' * counter)
-                classNameDict[className] = word
-                counter +=1
-
             # METHOD
             methodName = getMethodName(line)
             if methodName is not None and methodName != ("main" or "Main"):
                 # Create random word to replace class name
-                word = '$'+ ('\u200E' * counter)
+                word = '$' + ('\u200E' * counter)
                 methodNameDict[methodName] = word
                 counter += 1
 
@@ -88,51 +69,34 @@ def renameVar(inputFilePath, outputFilePath):
             if varName is not None:
                 for i in varName:
                     if i != ("break" or "continue"):
-                        word = '$'+ ('\u200E' * counter)
+                        word = '$' + ('\u200E' * counter)
                         varNameDict[i] = word
                         counter += 1
 
         # Set file pointer back to start
         javaFile.seek(0)
 
-        
         for line in javaFile:
-            # Get class name and random word value in dictionary
-            for cname, new in classNameDict.items():
-                
-            #     # class name .... {
-                initialClass = re.match(rf'\w+?\sclass\s({cname})', line)
-
-                # name n = new name()
-                newClass = re.match(rf'((\s+)?{cname})\s\w+(\s)?=(\s)?new\s({cname})\(.*\)', line)
-
-                # name() or name().a
-                callClass = re.match(rf'(\s+)?.*?({cname})\(.*\)(\.\w+)?', line)
-
-                # Change class name to random word based on re.match
-                if initialClass or newClass or callClass is not None:
-                    # rearrange(line)
-                    line = re.sub(rf'({cname})', new, line)
-            
-            # Get method name and random word value in dictionary    
+            # Get method name and random word value in dictionary
             for method, new in methodNameDict.items():
 
                 # (public) (static) <type> name (){
-                initialMethod = re.match(rf'(\s+)?(public\s|private\s|protected\s)?(static\s|final\s)?(void|int|String|boolean|byte|char|short|long|float|double|File)\s({method})', line)
+                initialMethod = re.match(
+                    rf'(\s+)?(public\s|private\s)?(static\s|final\s)?(void|int|String|boolean|byte|char|short|long|float|double|File)\s({method})',
+                    line)
                 # method() or a.method()
-                callMethod = re.match(rf'(\s+)?(\w+)?\.?({method})\(.*\)', line)
-                
+                callMethod = re.match(rf'(\s+)?(\w+)?[^super\.](.*\=.*)?\.?({method})\(.*\)', line)
+
                 if initialMethod or callMethod is not None:
                     line = re.sub(rf'({method})', new, line)
 
-            # Get variable name and random word value in dictionary    
-            for variable, new in varNameDict.items()   :
-                varFound = re.search(rf'[^\.\"\'](this.)?\b{variable}\b[^\"\']', line)
+            # Get variable name and random word value in dictionary
+            for variable, new in varNameDict.items():
+                varFound = re.search(rf'(this.)?\b{variable}\b', line)
 
                 if varFound is not None:
                     line = re.sub(rf'\b{variable}\b', new, line)
 
-            
             # Remove all comments
             line = removeComment(line)
 
