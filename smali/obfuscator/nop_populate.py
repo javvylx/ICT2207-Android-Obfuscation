@@ -44,10 +44,11 @@ def addNops(fin):
     indexList = fin
     getOpCodeList = getNopOpCode()
 
-    for i in range(len(indexList)): # Iterate through the full smali file
-        for j in range(len(getOpCodeList)): # Iterate through Valid OP Code
-            if getOpCodeList[j] in indexList[i]: # Check if substring contains an op code at the beginning of the string.
-                random_indexes = random.randint(1, 10) # If this is a valid op code, insert some nop instructions
+    for i in range(len(indexList)):  # Iterate through the full smali file
+        for j in range(len(getOpCodeList)):  # Iterate through Valid OP Code
+            if getOpCodeList[j] in indexList[
+                i]:  # Check if opcode substring contains an opcode from the list at the beginning of the list item.
+                random_indexes = random.randint(1, 10)  # If this is a valid op code, insert some nop instructions
                 nopString = ""
                 for x in range(random_indexes):
                     nopString += "\n\tnop"
@@ -112,7 +113,7 @@ def getBeforeMethod(fileList):
     return before
 
 
-def getNopOpCode(): # A list of valid op codes that are found after doing research
+def getNopOpCode():  # A list of valid op codes that are found after doing research
     getNopOpCodeList = [
         'move', 'move/from16', 'move/16', 'move-wide', 'move-wide/from16', 'move-wide/16', 'move-object',
         'move-object/from16', 'move-object/16', 'move-result', 'move-result-wide', 'move-result-object',
