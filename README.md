@@ -23,6 +23,7 @@ To run the tool, enter either of the following commands in python console/termin
 ### Compiling Java with Android Studio
 1. Locate the module `build.gradle` in the application folder
 2. Edit the `compileOptions` to include `encoding "IBM00858"`
+
 ![Gradle compileOptions](https://i.ibb.co/x8SwpRM/Picture1.png)
 
 
