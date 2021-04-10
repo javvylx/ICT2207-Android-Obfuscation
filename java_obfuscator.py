@@ -16,7 +16,7 @@ def getMethodName(line):
 
 def getVarName(line):
     res = None
-    if re.search('(public\s|private\s|protected\s)?(static\s|final\s)?[a-zA-Z<>\[\]]*\s[a-zA-Z]\w*\s?[,=;\)]\s?', line):
+    if re.search('(public\s|private\s)?(static\s|final\s)?[a-zA-Z<>\[\]]*\s[a-zA-Z]\w*\s?[,=;\)]\s?', line):
         res = re.findall('[a-zA-Z<>\[\]]*\s([a-zA-Z]\w*)\s?[,=;\)]', line)
     return res
 
@@ -125,29 +125,12 @@ def renameVar(inputFilePath, outputFilePath):
 
 
 def obfSoutLn(soutLn):
-    RTL=u'\u202E'
-    LTR=u'\u202A'
     tempStr = ""
     charArr = list(soutLn)
 
-    pos = secrets.randbelow(3)+2
-    charArr.insert(pos,RTL)
-
-    pos2 = secrets.randbelow(3)+5
-    charArr.insert(pos2,LTR)
-
-    pos3 = secrets.randbelow(3)+14
-    charArr.insert(pos3,RTL)
-
     for char in charArr:
-        
-        if not(char == RTL or char == LTR):
             
-            tempStr+=r'\\u{:04X}'.format(ord(char))
-        
-        else:
-            
-            tempStr+=char
+        tempStr+=r'\\u{:04X}'.format(ord(char))
 
     return tempStr
 

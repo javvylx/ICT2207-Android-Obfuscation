@@ -1,38 +1,36 @@
 import random
 import smali_iterator
-import try_catch_obfuscator
 import re
 
 infile = "../samples/test_try_catch.smali"
 outfile = "../samples/final.smali"
 
 
-def nopFunction(inFile, outFile):
+def nopFunction(inFile, outFile):  # Get the input and output file from flask GUI
     with open(inFile, "r") as fin, open(outFile, "w") as fout:
-        finalList = []
-        iterList = smali_iterator.populateList(fin)
+        finalList = []  # Initiate the empty list to be used to store the iterated nops at the end
+        iterList = smali_iterator.populateList(fin)  # Populate the list with the input file
 
-        for p in iterList:
+        for p in iterList:  # Remove iterator for ".line" as this is a debug line
             if re.search('line\s\d', p):
                 iterList.remove(p)
 
-        beforeMethodList = getBeforeMethod(iterList)
-        dicMethod = getMethod(iterList)
-        dicMethod2 = getProtectedMethod(iterList)
+        beforeMethodList = getBeforeMethod(iterList)  # Get anything above .method public (# direct methods)
+        dicMethod = getMethod(iterList)  # Get .method public (# virtual methods)
+        dicMethod2 = getProtectedMethod(iterList)  # Get .method protected
 
-        for j in beforeMethodList:
+        for j in beforeMethodList:  # Iterate through beforeMethodList
             finalList.append(j)
         finalList.append("")
 
-        for k in dicMethod:
-            # print(dicMethod[k])
-            fileList = addNops(dicMethod[k])
+        for k in dicMethod:  # Iterate through dicMethod
+            fileList = addNops(dicMethod[k])  # Inject junk data within the code in .method public
             for l in fileList:
                 finalList.append(l)
         finalList.append("")
 
-        for m in dicMethod2:
-            fileList = addNops(dicMethod2[m])
+        for m in dicMethod2:  # Iterate through dicMethod2
+            fileList = addNops(dicMethod2[m])  # Inject junk data within the code in .method protected
             for m in fileList:
                 finalList.append(m)
 
@@ -46,30 +44,16 @@ def addNops(fin):
     indexList = fin
     getOpCodeList = getNopOpCode()
 
-    for i in range(len(indexList)):
-        for j in range(len(getOpCodeList)):
-            if getOpCodeList[j] in indexList[i]:
-                random_indexes = random.randint(1, 10)
+    for i in range(len(indexList)):  # Iterate through the full smali file
+        for j in range(len(getOpCodeList)):  # Iterate through Valid OP Code
+            if getOpCodeList[j] in indexList[
+                i]:  # Check if opcode substring contains an opcode from the list at the beginning of the list item.
+                random_indexes = random.randint(1, 10)  # If this is a valid op code, insert some nop instructions
                 nopString = ""
                 for x in range(random_indexes):
                     nopString += "\n\tnop"
                 indexList[i] = indexList[i] + nopString
                 break
-
-    # currentLine = ""
-    # i = 0
-    # while currentLine != ".end method":  # In the random list, do a loop and add in nops
-    #     currentLine = indexList[i]
-    #     for j in getOpCodeList:
-    #         if j in indexList[i]:
-    #             for x in range(random_indexes):
-    #                 testvalue += 1
-    #                 indexList.insert(i + testvalue, "\tnop")
-    #                 # print(testvalue + i)
-    #             random_indexes = random.randint(4, 5)
-    #             testvalue = 0
-    #             break
-    #     i = + 1
 
     print(*indexList, sep="\n")
     return indexList
@@ -129,7 +113,7 @@ def getBeforeMethod(fileList):
     return before
 
 
-def getNopOpCode():
+def getNopOpCode():  # A list of valid op codes that are found after doing research
     getNopOpCodeList = [
         'move', 'move/from16', 'move/16', 'move-wide', 'move-wide/from16', 'move-wide/16', 'move-object',
         'move-object/from16', 'move-object/16', 'move-result', 'move-result-wide', 'move-result-object',
