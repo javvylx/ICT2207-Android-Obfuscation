@@ -1,4 +1,4 @@
-# SIT ICT 2202 AY20/21 Mobile Security Project 
+# SIT ICT 2207 AY20/21 Mobile Security Project 
 This is a Year 2 Trimester 2 ICT 2207 - Mobile Security Project. This project's objective is to design and develop smart obfuscation algorithms to prevent the reverse engineering of Android APKs. 
 
 The tool is able to take in and obfuscate both Java and Smali code that the user inputs via a web Graphical User Interface (GUI). Android applications can be reverse engineered for undesirable purposes, such as allowing others to inject malicious code into the application for malicious purposes, or copying and duplicating the application for their own resale. In order to counter this, it is important to obfuscate the codes that one writes to conceal its purpose. This protects the application from potential tampering and misuse. 
@@ -18,7 +18,7 @@ To run the tool, enter `flask run` or `python3 app.py` in python console/termina
 - Java source code obfuscation: The program is able to accept Java source code files for it to obfuscate. The techniques used are: encoding, renaming variables and methods, and removing debugging information.
 - Smali code obfuscation: The program is used for obfuscating the smali file are by doing try-catch obfuscation, adding of “nop” instructions, and removing debugging information. 
 
-### References 
+## References 
 - https://github.com/ClaudiuGeorgiu/Obfuscapk/blob/master/src/obfuscapk/resources/nop_valid_op_codes.txt
 - http://pallergabor.uw.hu/androidblog/dalvik_opcodes.html
 - https://www.sciencedirect.com/science/article/pii/S0167404816300529
