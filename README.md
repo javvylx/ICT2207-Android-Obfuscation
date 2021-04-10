@@ -18,7 +18,7 @@ To run the tool, enter `flask run` or `python3 app.py` in python console/termina
 - Java source code obfuscation: The program is able to accept Java source code files for it to obfuscate. The techniques used are: encoding, renaming variables and methods, and removing debugging information.
 - Smali code obfuscation: The program is used for obfuscating the smali file are by doing try-catch obfuscation, adding of “nop” instructions, and removing debugging information. 
 
-### References 
+## References 
 - https://github.com/ClaudiuGeorgiu/Obfuscapk/blob/master/src/obfuscapk/resources/nop_valid_op_codes.txt
 - http://pallergabor.uw.hu/androidblog/dalvik_opcodes.html
 - https://www.sciencedirect.com/science/article/pii/S0167404816300529
