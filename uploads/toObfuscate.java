@@ -10,22 +10,16 @@ class Main {
         System.out.println("1 For Pascal Triangle \n" + "2 For Armstrong Number \n" + b +  "3 For Vowels with If Else \n" + "4 For Vowels with Switch \n ");
         System.out.println("This is the value of variable b: " + b + ". and it works :)");
         int a = 2;
-        
-        if((i ^ -1) <= (-110 ^ -1)){
+        switch (a){
+            case 1:
+                m.PascalTriangle();
+                break;
 
-        }else{
-        
-            switch (a){
-                case 1:
-                    m.PascalTriangle();
-                    break;
+                    default:
+                        System.out.println("Wrong option");
+                        System.out.println("Test");
+                        break;
 
-                        default:
-                            System.out.println("Wrong option");
-                            System.out.println("Test");
-                            break;
-
-            } 
         }
     }
 
