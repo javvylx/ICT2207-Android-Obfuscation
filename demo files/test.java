@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
     public int fun(int n) {
         //  Block of code to handle errors
-        this.i;
         int i = 0, j = 0;
         int tmp = 0;
         for (i = 0; i < n; i++) {
@@ -39,11 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Hello World");
             }
         }
-	switch:
-		case 1:
-			int i = 0;
-		case 2:
-			int i = 1;
+
         return tmp;
     }
 }
