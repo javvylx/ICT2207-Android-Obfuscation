@@ -7,7 +7,7 @@ outfile = "../samples/final.smali"
 
 
 def nopFunction(inFile, outFile):  # Get the input and output file from flask GUI
-    with open(inFile, "r") as fin, open(outFile, "w") as fout:
+    with open(inFile, "r") as fin:
         finalList = []  # Initiate the empty list to be used to store the iterated nops at the end
         iterList = smali_iterator.populateList(fin)  # Populate the list with the input file
 
@@ -34,10 +34,11 @@ def nopFunction(inFile, outFile):  # Get the input and output file from flask GU
             for m in fileList:
                 finalList.append(m)
 
-        fout.write("\n".join(finalList))
+        with open(outFile, "w") as fout:
+            fout.write("\n".join(finalList))
 
-    inFile.close()
-    outFile.close()
+    fin.close()
+    fout.close()
 
 
 def addNops(fin):
@@ -147,5 +148,5 @@ def getNopOpCode():  # A list of valid op codes that are found after doing resea
     return getNopOpCodeList
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
