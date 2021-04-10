@@ -5,12 +5,13 @@ The tool is able to take in and obfuscate both Java and Smali code that the user
 
 ## Getting Started
 Download the project into a folder of your choice using the following [link](https://github.com/javvylx/ICT2207-Android-Obfuscation)
+Install and run this project in Python3 Environment
 
-## Installation of Dependencies
+## Dependencies Installation
 To install the tools, enter `pip install -r requirements.txt` in python console/terminal to install the necessary dependencies for the project
 
 ## Usage
-To run the tool, enter `flask run` in python console/terminal under the project root directory
+To run the tool, enter `flask run` or `python3 app.py` in python console/terminal under the project root directory
 
 ### Features 
 - APK file handling: When a file uploaded is an APK file, the options available are: decompile, and obfuscate and recompile. The decompiling and recompiling functions utilizes Apktool for its operation. 
