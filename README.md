@@ -14,7 +14,7 @@ To install the tools, enter `pip install -r requirements.txt` in python console/
 To run the tool, enter `flask run` or `python3 app.py` in python console/terminal under the project root directory
 
 ### Features 
-- APK file handling: When a file uploaded is an APK file, the options available are: decompile, and obfuscate and recompile. The decompiling and recompiling functions utilizes Apktool for its operation. 
+- APK file handling: When a file uploaded is an APK file, the options available are: decompile, and obfuscate and recompile. The decompiling and recompiling functions utilizes Apktool for its operation. (For obfuscation and recompilation, find the MainActivity.smali in smali folder) 
 - Java source code obfuscation: The program is able to accept Java source code files for it to obfuscate. The techniques used are: encoding, renaming variables and methods, and removing debugging information.
 - Smali code obfuscation: The program is used for obfuscating the smali file are by doing try-catch obfuscation, adding of “nop” instructions, and removing debugging information. 
 
