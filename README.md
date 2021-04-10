@@ -15,7 +15,7 @@ To run the tool, enter `flask run` in python console/terminal under the project 
 ### Features 
 - APK file handling: When a file uploaded is an APK file, the options available are: decompile, and obfuscate and recompile. The decompiling and recompiling functions utilizes Apktool for its operation. 
 - Java source code obfuscation: The program is able to accept Java source code files for it to obfuscate. The techniques used are: encoding, renaming variables and methods, and removing debugging information.
-- Smali file handling: The program is used for obfuscating the smali file are by doing try-catch obfuscation, adding of “nop” instructions, and removing debugging information. 
+- Smali code obfuscation: The program is used for obfuscating the smali file are by doing try-catch obfuscation, adding of “nop” instructions, and removing debugging information. 
 
 ### References 
 - https://github.com/ClaudiuGeorgiu/Obfuscapk/blob/master/src/obfuscapk/resources/nop_valid_op_codes.txt
