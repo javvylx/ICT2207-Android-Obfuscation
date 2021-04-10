@@ -7,6 +7,7 @@ import secrets
 import os 
 
 
+
 def getMethodName(line):
     res = None
     if re.search('(public\s|private\s)?(static\s|final\s)?(void|int|String|boolean|byte|char|short|long|float|double|File)\s\w+\(.*\)', line):
@@ -37,14 +38,27 @@ def getImport(lineArr):
     return res
 
 
-def removeComment(line):
-    if re.search('.*(\/\/)', line):
-        line = re.sub('\/\/(.*)?', "", line)
-    if re.search('.*(\/\*)', line):
-        line = re.sub('\/\*(.*)?', "", line)
-    if re.match('^((\s+)?\*)\s?.*', line):
+def removeComment(line, count):
+    if count == 1:
+        # Check if */
+        if re.search('(.*)?(\*\/)(.*)?', line):
+            count = 0
+        # Remove line
         line = ""
-    return line
+    else:
+        # Check if //
+        if re.search('.*(\/\/)', line):
+            line = ""
+
+        # Check if /*
+        if re.search('(.*)?(\/\*)(.*)?', line):
+            count = 1
+            # Check if */ within same line
+            if re.search('(.*)?(\*\/)(.*)?', line):
+                count = 0
+            # Remove line
+            line = ""
+    return line, count
 
 
 def removeLog(line):
@@ -59,6 +73,7 @@ def renameVar(inputFilePath, outputFilePath):
     methodNameDict = {}
     varNameDict = {}
     counter = 1
+    count = 0       # Check if multiline comment. 1 if within comments
 
     # Create output file
     outFile = open(outputFilePath, "w", encoding="utf-8")   
@@ -91,8 +106,10 @@ def renameVar(inputFilePath, outputFilePath):
         javaFile.seek(0)
 
         for line in javaFile:
-            # Remove all comments
-            line = removeComment(line)
+            # Get line and
+            line, newcount = removeComment(line, count)
+            count = newcount
+
             # Remove all logs
             line = removeLog(line)
 
@@ -114,7 +131,6 @@ def renameVar(inputFilePath, outputFilePath):
 
                 if varFound is not None:
                     line = re.sub(rf'\b{variable}\b', new, line)
-
             outFile.write(line)
 
     # Close files that are not used
