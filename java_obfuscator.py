@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
+
 import re
-import random, string
-import io
 import secrets
 import os 
+
 
 def getMethodName(line):
     res = None
@@ -14,16 +13,19 @@ def getMethodName(line):
         res = re.search('\s(\w+)\(.*\)', line).group(1)
     return res
 
+
 def getVarName(line):
     res = None
     if re.search('(public\s|private\s|protected\s)?(static\s|final\s)?[a-zA-Z<>\[\]]*\s[a-zA-Z]\w*\s?[,=;\)]\s?', line):
         res = re.findall('[a-zA-Z<>\[\]]*\s([a-zA-Z]\w*)\s?[,=;\)]', line)
     return res
 
+
 def getSoutLn(line):
     res = None
     res = re.findall('System.out.println\(\".+?\"\)\;', line)
     return res
+
 
 def getImport(lineArr):
     res = []
@@ -44,8 +46,16 @@ def removeComment(line):
         line = ""
     return line
 
+
+def removeLog(line):
+    if re.search('android\.util\.Log\.[a-z]+.*', line):
+        line = ""
+    if re.search('Log\.[a-z]+.*', line):
+        line = ""
+    return line
+
+
 def renameVar(inputFilePath, outputFilePath):
-    classNameDict = {}
     methodNameDict = {}
     varNameDict = {}
     counter = 1
@@ -59,27 +69,35 @@ def renameVar(inputFilePath, outputFilePath):
             # METHOD
             methodName = getMethodName(line)
             if methodName is not None and methodName != ("main" or "Main"):
-                # Create random word to replace class name
+                # Create string to replace method name
                 word = '$' + ('\u200E' * counter)
                 methodNameDict[methodName] = word
+                # increment counter for number of \u200E to add
                 counter += 1
 
             # VARIABLE
             varName = getVarName(line)
             if varName is not None:
                 for i in varName:
+                    # Make sure variable is not break or continue
                     if i != ("break" or "continue"):
+                        # Create string to replace variable name
                         word = '$' + ('\u200E' * counter)
                         varNameDict[i] = word
+                        # increment counter for number of \u200E to add
                         counter += 1
 
         # Set file pointer back to start
         javaFile.seek(0)
 
         for line in javaFile:
+            # Remove all comments
+            line = removeComment(line)
+            # Remove all logs
+            line = removeLog(line)
+
             # Get method name and random word value in dictionary
             for method, new in methodNameDict.items():
-
                 # (public) (static) <type> name (){
                 initialMethod = re.match(
                     rf'(\s+)?(public\s|private\s)?(static\s|final\s)?(void|int|String|boolean|byte|char|short|long|float|double|File)\s({method})',
@@ -92,13 +110,12 @@ def renameVar(inputFilePath, outputFilePath):
 
             # Get variable name and random word value in dictionary
             for variable, new in varNameDict.items():
-                varFound = re.search(rf'(this.)?\b{variable}\b', line)
+                varFound = re.search(rf'{variable}', line)
+                print(varFound)
+                print(line)
 
                 if varFound is not None:
                     line = re.sub(rf'\b{variable}\b', new, line)
-
-            # Remove all comments
-            line = removeComment(line)
 
             outFile.write(line)
 
