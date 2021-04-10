@@ -4,7 +4,7 @@ This is a Year 2 Trimester 2 ICT 2207 - Mobile Security Project. This project's 
 The tool is able to take in and obfuscate both Java and Smali code that the user inputs via a web Graphical User Interface (GUI). Android applications can be reverse engineered for undesirable purposes, such as allowing others to inject malicious code into the application for malicious purposes, or copying and duplicating the application for their own resale. In order to counter this, it is important to obfuscate the codes that one writes to conceal its purpose. This protects the application from potential tampering and misuse. 
 
 ## Getting Started
-- Download the project into a folder of your choice using the following [link](https://github.com/javvylx/ICT2207-Android-Obfuscation)
+- Download the project into a folder of your choice
 - Install and run this project in Python3 Environment
 
 ## Dependencies Installation
