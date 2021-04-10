@@ -29,5 +29,5 @@ To run the tool, enter `flask run` in python console/terminal under the project 
 - Javier Lim [@javvylx](https://github.com/javvylx)
 - Tay Kai Keng [@TayKK](https://github.com/TayKK)
 - Ng Zhen Feng [@zfnggg](https://github.com/zfnggg)
-- Eugene Tan Wei Jie [@CB-Hong](https://github.com/J3n3ns)
+- Eugene Tan Wei Jie [@J3n3ns](https://github.com/J3n3ns)
 - Claudia Chan [@x3Kuro](https://github.com/x3Kuro)
