@@ -111,8 +111,6 @@ def renameVar(inputFilePath, outputFilePath):
             # Get variable name and random word value in dictionary
             for variable, new in varNameDict.items():
                 varFound = re.search(rf'{variable}', line)
-                print(varFound)
-                print(line)
 
                 if varFound is not None:
                     line = re.sub(rf'\b{variable}\b', new, line)
